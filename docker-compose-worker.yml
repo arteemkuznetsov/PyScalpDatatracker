@@ -1,0 +1,17 @@
+services:
+  app:
+    image: pyscalp-datatracker-worker
+    container_name: worker
+    volumes:
+      - .:/app
+      - ./logs:/app/worker/logs
+    env_file:
+      - .env
+    environment:
+      - LOG_FILE=/app/worker/logs/requests.log
+    networks:
+      - remote
+
+networks:
+  remote:
+    driver: bridge
