@@ -1,4 +1,5 @@
 import time
+from datetime import timedelta
 
 import requests
 
@@ -15,20 +16,28 @@ price_service = PriceService()
 
 
 class Tracker:
+    selected_pair: PairView
+    pair_check_interval_min: int = 1
+
     async def run(self):
+        start_time = time.time()
+        self.selected_pair = await self.get_selected_pair()
+
         while True:
-            # TODO: делать выборку selected_pair каждые 5 минут
-            selected_pair = await self.get_selected_pair()
+            current_time = time.time()
+            if int(current_time - start_time) >= self.pair_check_interval_min * 60:
+                self.selected_pair = await self.get_selected_pair()
+                start_time = time.time()
 
             time.sleep(1.1)
             try:
-                current_price = self.get_current_price(pair=selected_pair.text)
-                print(current_price)
+                current_price = self.get_current_price(pair=self.selected_pair.text)
+                logger.info(f'{self.selected_pair.text}: {current_price}')
                 await price_service.create(
                     PriceView(
                         value=current_price,
                         timestamp=int(time.time()),
-                        pair_id=selected_pair.id
+                        pair_id=self.selected_pair.id
                     )
                 )
             except Exception as e:

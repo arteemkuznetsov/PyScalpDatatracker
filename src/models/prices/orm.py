@@ -7,7 +7,7 @@ from src.db import Base
 class Price(Base):
     __tablename__ = 'prices'
     id = Column(Integer, primary_key=True, autoincrement=True)
-    value: Mapped[float] = mapped_column(Numeric(precision=6, scale=4), nullable=False)
+    value: Mapped[float] = mapped_column(Numeric(precision=10, scale=4), nullable=False)
     timestamp: Mapped[int] = mapped_column(BigInteger, nullable=False)
     pair_id: Mapped[int] = mapped_column(BigInteger, ForeignKey('pairs.id', ondelete='CASCADE'), nullable=False)
     pair = relationship(
