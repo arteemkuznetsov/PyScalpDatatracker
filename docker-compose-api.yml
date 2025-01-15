@@ -1,6 +1,7 @@
 services:
   app:
-    image: pyscalp-datatracker-api:latest
+    image: pyscalp-datatracker
+    restart: always
     container_name: api
     env_file:
       - .env
@@ -12,9 +13,6 @@ services:
       - logs:/app/api/logs  # Монтируем volume для логов
     environment:
       - LOG_FILE=/app/api/logs/requests.log
-
-volumes:
-  logs:
 
 networks:
   remote:

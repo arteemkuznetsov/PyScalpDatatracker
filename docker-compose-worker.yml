@@ -1,9 +1,9 @@
 services:
   app:
-    image: pyscalp-datatracker-worker
+    image: pyscalp-datatracker
+    restart: always
     container_name: worker
     volumes:
-      - .:/app
       - ./logs:/app/worker/logs
     env_file:
       - .env
