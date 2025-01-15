@@ -10,8 +10,7 @@ update:
 		echo "No changes pulled from git, skipping build."; \
 	else \
 		echo "Changes detected, building Docker image..."; \
-		docker build -t pyscalp-datatracker-api:latest .; \
-		docker build -t pyscalp-datatracker-worker .; \
+		docker build -t pyscalp-datatracker .; \
 	fi
 run: update
 	@if docker ps -q --filter name=api | grep .; then \
