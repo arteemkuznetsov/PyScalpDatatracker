@@ -5,6 +5,9 @@ COMPOSE_FILE = docker-compose.yml
 DOCKER_COMPOSE = docker compose -f
 
 
+build:
+	docker build -t pyscalp-datatracker:latest .
+
 update:
 	@if git pull | grep -q 'Already up to date.'; then \
 		echo "No changes pulled from git, skipping build."; \
