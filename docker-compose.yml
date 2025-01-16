@@ -35,7 +35,7 @@ services:
   init:
     image: pyscalp-datatracker
     container_name: init-db
-    command: ls -la
+    command: alembic upgrade head
     env_file:
       - .env-app
     networks:
