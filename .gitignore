@@ -160,5 +160,11 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 .idea/
 
-.env
+.env-app
+.env-pg
+.env-pgadmin
 alembic.ini
+
+logs-api/
+logs-worker/
+db_data/
