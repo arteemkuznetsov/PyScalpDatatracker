@@ -41,7 +41,8 @@ services:
     networks:
       - remote
     depends_on:
-      - db
+      db:
+        condition: service_healthy
 
   app:
     image: pyscalp-datatracker
