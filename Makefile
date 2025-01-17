@@ -1,12 +1,18 @@
 .PHONY: run restart update
 
 COMPOSE_FILE = docker-compose.yml
+COMPOSE_FILE_DB = ./infra/db/docker-compose.yml
 
 DOCKER_COMPOSE = docker compose -f
 
-
 build:
 	docker build -t pyscalp-datatracker:latest .
+
+init:
+	mkdir -p ./infra/db/db_data
+	mkdir -p ./logs-api
+	mkdir -p ./logs-worker
+	$(DOCKER_COMPOSE) $(COMPOSE_FILE_DB) up -d
 
 update:
 	@if git pull | grep -q 'Already up to date.'; then \

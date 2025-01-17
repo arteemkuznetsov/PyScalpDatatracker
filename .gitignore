@@ -161,9 +161,9 @@ cython_debug/
 .idea/
 
 .env-app
-.env-pg
-.env-pgadmin
+infra/db/.env-pg
+infra/db/.env-pgadmin
 
 logs-api/
 logs-worker/
-db_data/
+infra/db/db_data/

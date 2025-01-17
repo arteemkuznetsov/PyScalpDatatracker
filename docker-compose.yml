@@ -1,50 +1,6 @@
 services:
 
-  db:
-    image: postgres:15.10
-    container_name: postgres
-    restart: always
-    env_file:
-      - .env-pg
-    ports:
-      - "6432:5432"
-    networks:
-      - remote
-    volumes:
-      - ./db_data:/var/lib/postgresql/data
-    healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U postgres -d pyscalp_datatracker" ]
-      interval: 10s
-      retries: 5
-      start_period: 30s
-      timeout: 5s
-
-  pgadmin:
-    container_name: pgadmin4
-    image: dpage/pgadmin4:8.14.0
-    restart: always
-    env_file:
-      - .env-pgadmin
-    ports:
-      - "5050:80"
-    networks:
-      - remote
-    depends_on:
-      - db
-
-  init:
-    image: pyscalp-datatracker
-    container_name: init-db
-    command: alembic upgrade head
-    env_file:
-      - .env-app
-    networks:
-      - remote
-    depends_on:
-      db:
-        condition: service_healthy
-
-  app:
+  api:
     image: pyscalp-datatracker
     restart: always
     container_name: api
@@ -56,11 +12,9 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - ./logs-api:/app/api/logs  # Монтируем volume для логов
+      - ./logs-api:/app/api/logs
     environment:
       - LOG_FILE=/app/api/logs/requests.log
-    depends_on:
-      - init
 
   worker:
     image: pyscalp-datatracker
@@ -75,9 +29,8 @@ services:
       - LOG_FILE=/app/worker/logs/requests.log
     networks:
       - remote
-    depends_on:
-      - init
 
 networks:
   remote:
-    driver: bridge
+    external: true
+    name: db_remote
