@@ -11,22 +11,14 @@ services:
       - remote
     ports:
       - "8000:8000"
-    volumes:
-      - ./logs-api:/app/api/logs
-    environment:
-      - LOG_FILE=/app/api/logs/requests.log
 
   worker:
     image: pyscalp-datatracker
     restart: always
     container_name: worker
     command: python worker.py
-    volumes:
-      - ./logs-worker:/app/worker/logs
     env_file:
       - .env-app
-    environment:
-      - LOG_FILE=/app/worker/logs/requests.log
     networks:
       - remote
 

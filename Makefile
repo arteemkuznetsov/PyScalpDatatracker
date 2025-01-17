@@ -10,8 +10,6 @@ build:
 
 init:
 	mkdir -p ./infra/db/db_data
-	mkdir -p ./logs-api
-	mkdir -p ./logs-worker
 	$(DOCKER_COMPOSE) $(COMPOSE_FILE_DB) up -d
 
 update:
