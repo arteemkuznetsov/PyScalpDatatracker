@@ -6,8 +6,6 @@ services:
     restart: always
     env_file:
       - .env-pg 
-    ports:      
-      - "6432:5432"
     networks:
       remote:
         ipv4_address: 172.22.1.3
