@@ -13,16 +13,6 @@ TSettings = TypeVar('TSettings', bound=BaseSettings)
 dotenv.load_dotenv()
 
 
-class AppSettings(BaseSettings):
-    model_config = SettingsConfigDict(
-        env_file=f'{os.getcwd()}/.env',
-        env_file_encoding='utf-8',
-        env_prefix='app_',
-    )
-
-    debug: bool = True
-
-
 class DatabaseSettings(BaseSettings):
     model_config = SettingsConfigDict(
         env_file=f'{os.getcwd()}/.env',
