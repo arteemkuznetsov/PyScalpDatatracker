@@ -6,6 +6,7 @@ COMPOSE_FILE_DB = ./infra/db/docker-compose.yml
 DOCKER_COMPOSE = docker compose -f
 
 build:
+	git pull
 	docker build -t pyscalp-datatracker:latest .
 
 init:
@@ -36,6 +37,10 @@ run:
 
 restart:
 	$(foreach file, $(COMPOSE_FILE), $(DOCKER_COMPOSE) $(file) up --build -d;)
+
+rebuild-api: update
+	docker-compose rm -f -s -v api
+	docker-compose up -d --no-deps --build api
 
 stop:
 	$(foreach file, $(COMPOSE_FILE), $(DOCKER_COMPOSE) $(file) down;)
