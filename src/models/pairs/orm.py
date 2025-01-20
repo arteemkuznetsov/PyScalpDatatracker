@@ -8,4 +8,4 @@ class Pair(Base):
     __tablename__ = 'pairs'
     id = Column(Integer, primary_key=True, autoincrement=True)
     text: Mapped[str] = mapped_column(String, nullable=False, unique=True)
-    selected: Mapped[bool] = mapped_column(Boolean, nullable=True, unique=False)
+    selected: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False, unique=False)
