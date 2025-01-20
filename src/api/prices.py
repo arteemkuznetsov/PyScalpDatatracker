@@ -27,7 +27,6 @@ async def create(request: dto.PriceView) -> dto.PriceView:
         return created_obj
 
 
-# TODO: Read by TIMESTAMP field and by start-end
 @prices_router.get(
     path='/{id}',
     status_code=status.HTTP_200_OK,
@@ -52,7 +51,7 @@ async def read(id: int) -> dto.PriceView:
 )
 async def read_all(diff_sec: int | None = None) -> list[dto.PriceView]:
     if diff_sec:
-        rows = await service.read_last_sec_cur_pair(diff_sec)
+        rows = await service.read_current_pair_from_time(diff_sec)
     else:
         rows = await service.read_all()
     if rows is None:

@@ -42,7 +42,7 @@ class Repository(BaseRepository):
             if model:
                 return self._model_to_pydantic(model, self.view_model)
 
-    async def read_last_sec_cur_pair(self, diff_sec: int) -> list[dto.PriceView] | None:
+    async def read_current_pair_from_time(self, diff_sec: int) -> list[dto.PriceView] | None:
         pair_service = PriceService()
         selected_pair = await pair_service.read_selected()
         if not selected_pair:

@@ -44,6 +44,22 @@ async def read(id: int) -> dto.PairView:
 
 
 @pairs_router.get(
+    path='/selected',
+    status_code=status.HTTP_200_OK,
+    tags=['Trading pairs'],
+    name='Read selected trading pair'
+)
+async def read_selected() -> dto.PairView:
+    read_obj = await service.read_selected()
+    if not read_obj:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail='Cannot read trading pair'
+        )
+    return read_obj
+
+
+@pairs_router.get(
     path='/',
     status_code=status.HTTP_200_OK,
     tags=['Trading pairs'],

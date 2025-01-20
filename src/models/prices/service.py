@@ -19,8 +19,8 @@ class Service:
     async def read(self, id: int) -> dto.PriceView | None:
         return await self.repository.read(id)
 
-    async def read_last_sec_cur_pair(self, diff_sec: int) -> list[dto.PriceView] | None:
-        return await self.repository.read_last_sec_cur_pair(diff_sec)
+    async def read_current_pair_from_time(self, diff_sec: int) -> list[dto.PriceView] | None:
+        return await self.repository.read_current_pair_from_time(diff_sec)
 
     async def read_all(self) -> list[dto.PriceView]:
         return await self.repository.read_all()
