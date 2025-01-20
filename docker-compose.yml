@@ -10,7 +10,7 @@ services:
     networks:
       - remote
     ports:
-      - "8000:8000"
+      - "8135:8000"
 
   worker:
     image: pyscalp-datatracker
