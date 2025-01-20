@@ -47,7 +47,7 @@ async def read(id: int) -> dto.PriceView:
     path='/',
     status_code=status.HTTP_200_OK,
     tags=['Prices'],
-    name='Read multiple prices',
+    name='Read multiple prices: All / Selected Pair Observations Since N Seconds Ago',
 )
 async def read_all(diff_sec: int | None = None) -> list[dto.PriceView]:
     if diff_sec:
