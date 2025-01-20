@@ -44,7 +44,7 @@ async def read(id: int) -> dto.PairView:
 
 
 @pairs_router.get(
-    path='/selected',
+    path='/selected/',
     status_code=status.HTTP_200_OK,
     tags=['Trading pairs'],
     name='Read selected trading pair'
