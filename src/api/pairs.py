@@ -1,6 +1,7 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 from starlette import status
 
+from src.auth import Auth
 from src.models.pairs import dto
 from src.models.pairs.service import Service
 
@@ -13,6 +14,7 @@ service = Service()
     status_code=status.HTTP_201_CREATED,
     tags=['Trading pairs'],
     name='Create trading pair',
+    dependencies=[Depends(Auth().check_access_token)]
 )
 async def create(request: dto.PairView) -> dto.PairView:
     created_obj = await service.create(request)
@@ -29,7 +31,7 @@ async def create(request: dto.PairView) -> dto.PairView:
     path='/{id}',
     status_code=status.HTTP_200_OK,
     tags=['Trading pairs'],
-    name='Read trading pair',
+    name='Read trading pair'
 )
 async def read(id: int) -> dto.PairView:
     read_obj = await service.read(id)
@@ -45,7 +47,7 @@ async def read(id: int) -> dto.PairView:
     path='/',
     status_code=status.HTTP_200_OK,
     tags=['Trading pairs'],
-    name='Read all trading pairs',
+    name='Read all trading pairs'
 )
 async def read_all() -> list[dto.PairView]:
     rows = await service.read_all()
@@ -59,6 +61,7 @@ async def read_all() -> list[dto.PairView]:
     status_code=status.HTTP_200_OK,
     tags=['Trading pairs'],
     name='Update trading pair',
+    dependencies=[Depends(Auth().check_access_token)]
 )
 async def update(id: int, request: dto.PairView) -> dict:
     updated_bot = await service.update(id, request)
@@ -74,6 +77,7 @@ async def update(id: int, request: dto.PairView) -> dict:
     status_code=status.HTTP_204_NO_CONTENT,
     tags=['Trading pairs'],
     name='Delete trading pair',
+    dependencies=[Depends(Auth().check_access_token)]
 )
 async def delete(id: int) -> None:
     deleted_obj = await service.delete(id)

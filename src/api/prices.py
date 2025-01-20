@@ -1,6 +1,7 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 from starlette import status
 
+from src.auth import Auth
 from src.models.prices import dto
 from src.models.prices.service import Service
 
@@ -13,6 +14,7 @@ service = Service()
     status_code=status.HTTP_201_CREATED,
     tags=['Prices'],
     name='Create price',
+    dependencies=[Depends(Auth().check_access_token)]
 )
 async def create(request: dto.PriceView) -> dto.PriceView:
     created_obj = await service.create(request)
@@ -63,6 +65,7 @@ async def read_all(diff_sec: int | None = None) -> list[dto.PriceView]:
     status_code=status.HTTP_200_OK,
     tags=['Prices'],
     name='Update price',
+    dependencies=[Depends(Auth().check_access_token)]
 )
 async def update(id: int, request: dto.PriceView) -> dict:
     updated_bot = await service.update(id, request)
@@ -78,6 +81,7 @@ async def update(id: int, request: dto.PriceView) -> dict:
     status_code=status.HTTP_204_NO_CONTENT,
     tags=['Prices'],
     name='Delete price',
+    dependencies=[Depends(Auth().check_access_token)]
 )
 async def delete(id: int) -> None:
     deleted_obj = await service.delete(id)

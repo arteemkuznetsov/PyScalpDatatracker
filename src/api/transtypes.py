@@ -1,6 +1,7 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 from starlette import status
 
+from src.auth import Auth
 from src.models.pairs import dto
 from src.models.pairs.service import Service
 
@@ -13,6 +14,7 @@ service = Service()
     status_code=status.HTTP_201_CREATED,
     tags=['Transaction types'],
     name='Create transaction type',
+    dependencies=[Depends(Auth().check_access_token)]
 )
 async def create(request: dto.PairView) -> dto.PairView:
     created_obj = await service.create(request)
@@ -59,6 +61,7 @@ async def read_all() -> list[dto.PairView]:
     status_code=status.HTTP_200_OK,
     tags=['Transaction types'],
     name='Update transaction type',
+    dependencies=[Depends(Auth().check_access_token)]
 )
 async def update(id: int, request: dto.PairView) -> dict:
     updated_bot = await service.update(id, request)
@@ -74,6 +77,7 @@ async def update(id: int, request: dto.PairView) -> dict:
     status_code=status.HTTP_204_NO_CONTENT,
     tags=['Transaction types'],
     name='Delete transaction type',
+    dependencies=[Depends(Auth().check_access_token)]
 )
 async def delete(id: int) -> None:
     deleted_obj = await service.delete(id)
