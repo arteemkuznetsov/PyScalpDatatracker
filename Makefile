@@ -9,7 +9,7 @@ build:
 	git pull
 	docker build -t pyscalp-datatracker:latest .
 
-init:
+init: build
 	mkdir -p ./infra/db/db_data
 	$(DOCKER_COMPOSE) $(COMPOSE_FILE_DB) up -d
 
@@ -20,17 +20,7 @@ update:
 		echo "Changes detected, building Docker image..."; \
 		docker build -t pyscalp-datatracker .; \
 	fi
-#run: update
-#	@if docker ps -q --filter name=api | grep .; then \
-#		docker stop api; \
-#		docker rm -f api; \
-#	fi
-#	sudo docker-compose -f docker-compose-api.yml up -d
-#	@if docker ps -q --filter name=worker | grep .; then \
-#		docker stop worker; \
-#		docker rm -f worker; \
-#	fi
-#	sudo docker-compose -f docker-compose-worker.yml up -d
+
 run:
 	git pull
 	$(DOCKER_COMPOSE) $(COMPOSE_FILE) up --build -d	
@@ -47,7 +37,3 @@ stop:
 
 clean:
 	docker image prune -f
-
-#logs:
-#	docker compose -f docker-compose-api.yml logs
-#	docker compose -f docker-compose-worker.yml logs
