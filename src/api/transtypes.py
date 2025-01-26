@@ -28,13 +28,13 @@ async def create(request: dto.TransTypeView) -> dto.TransTypeView:
 
 
 @transtypes_router.get(
-    path='/{id}{text}',
+    path='/{text}',
     status_code=status.HTTP_200_OK,
     tags=['Transaction types'],
     name='Read transaction type',
 )
-async def read(id: int | None = None, text: str | None = None) -> dto.TransTypeView:
-    read_obj = await service.read(id, text)
+async def read(text: str) -> dto.TransTypeView:
+    read_obj = await service.read(text)
     if not read_obj:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,

@@ -29,25 +29,15 @@ class Repository(BaseRepository):
             await session.refresh(model)
             return self._model_to_pydantic(model, self.view_model)
 
-    async def read(self, id: int | None = None, text: str | None = None) -> dto.TransTypeView | None:
+    async def read(self, text: str) -> dto.TransTypeView | None:
         async with self.session() as session:
-            if id or text:
-                if id:
-                    stmt = (
-                        self.__base_stmt()
-                        .where(self.database_model.id == id)
-                    )
-                elif text:
-                    stmt = (
-                        self.__base_stmt()
-                        .where(self.database_model.text == text)
-                    )
-                model = (await session.scalars(stmt)).unique().first()
-                if model:
-                    return self._model_to_pydantic(model, self.view_model)
-            else:
-                return None
-
+            stmt = (
+                self.__base_stmt()
+                .where(self.database_model.text == text)
+            )
+            model = (await session.scalars(stmt)).unique().first()
+            if model:
+                return self._model_to_pydantic(model, self.view_model)
 
     async def read_all(self) -> list[dto.TransTypeView]:
         stmt = (
