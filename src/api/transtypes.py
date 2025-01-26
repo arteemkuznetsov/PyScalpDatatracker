@@ -28,7 +28,7 @@ async def create(request: dto.TransTypeView) -> dto.TransTypeView:
 
 
 @transtypes_router.get(
-    path='/{id}',
+    path='/',
     status_code=status.HTTP_200_OK,
     tags=['Transaction types'],
     name='Read transaction type',
