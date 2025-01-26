@@ -12,8 +12,8 @@ class Service:
         create_data = dto.TransTypeView(text=request.text)
         return await self.repository.create(create_data)
 
-    async def read(self, id: int) -> dto.TransTypeView | None:
-        return await self.repository.read(id)
+    async def read(self, id: int | None = None, text: str | None = None) -> dto.TransTypeView | None:
+        return await self.repository.read(id, text)
 
     async def read_all(self) -> list[dto.TransTypeView]:
         return await self.repository.read_all()

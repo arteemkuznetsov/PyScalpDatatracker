@@ -2,8 +2,8 @@ from fastapi import APIRouter, HTTPException, Depends
 from starlette import status
 
 from src.auth import Auth
-from src.models.pairs import dto
-from src.models.pairs.service import Service
+from src.models.transtypes import dto
+from src.models.transtypes.service import Service
 
 transtypes_router = APIRouter()
 service = Service()
@@ -16,7 +16,7 @@ service = Service()
     name='Create transaction type',
     dependencies=[Depends(Auth().check_access_token)]
 )
-async def create(request: dto.PairView) -> dto.PairView:
+async def create(request: dto.TransTypeView) -> dto.TransTypeView:
     created_obj = await service.create(request)
     if created_obj is None:
         raise HTTPException(
@@ -33,8 +33,8 @@ async def create(request: dto.PairView) -> dto.PairView:
     tags=['Transaction types'],
     name='Read transaction type',
 )
-async def read(id: int) -> dto.PairView:
-    read_obj = await service.read(id)
+async def read(id: int | None = None, text: str | None = None) -> dto.TransTypeView:
+    read_obj = await service.read(id, text)
     if not read_obj:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -49,7 +49,7 @@ async def read(id: int) -> dto.PairView:
     tags=['Transaction types'],
     name='Read all transaction types',
 )
-async def read_all() -> list[dto.PairView]:
+async def read_all() -> list[dto.TransTypeView]:
     rows = await service.read_all()
     if rows is None:
         return []
@@ -63,7 +63,7 @@ async def read_all() -> list[dto.PairView]:
     name='Update transaction type',
     dependencies=[Depends(Auth().check_access_token)]
 )
-async def update(id: int, request: dto.PairView) -> dict:
+async def update(id: int, request: dto.TransTypeView) -> dict:
     updated_bot = await service.update(id, request)
     if not updated_bot:
         raise HTTPException(
