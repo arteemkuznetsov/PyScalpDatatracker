@@ -12,7 +12,7 @@ class Service:
         create_data = dto.TransactionView(
             value=request.value,
             timestamp=request.timestamp,
-            type_id=request.pair_id
+            type_id=request.type_id
         )
         return await self.repository.create(create_data)
 
@@ -29,7 +29,7 @@ class Service:
         update_data = dto.TransactionView(
             value=request.value,
             timestamp=request.timestamp,
-            type_id=request.pair_id
+            type_id=request.type_id
         )
         return await self.repository.update(update_data, data)
 
