@@ -57,14 +57,14 @@ async def read_all() -> list[dto.TransTypeView]:
 
 
 @transtypes_router.put(
-    path='/{id}',
+    path='/{text}',
     status_code=status.HTTP_200_OK,
     tags=['Transaction types'],
     name='Update transaction type',
     dependencies=[Depends(Auth().check_access_token)]
 )
-async def update(id: int, request: dto.TransTypeView) -> dict:
-    updated_bot = await service.update(id, request)
+async def update(text: str, request: dto.TransTypeView) -> dict:
+    updated_bot = await service.update(text, request)
     if not updated_bot:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,

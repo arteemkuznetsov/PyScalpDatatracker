@@ -14,6 +14,8 @@ class Service:
             timestamp=request.timestamp,
             type_id=request.type_id
         )
+        from loguru import logger
+        logger.info('INSIDE Service.create() transaction:', create_data)
         return await self.repository.create(create_data)
 
     async def read(self, id: int) -> dto.TransactionView | None:

@@ -17,7 +17,10 @@ service = Service()
     dependencies=[Depends(Auth().check_access_token)]
 )
 async def create(request: dto.TransactionView) -> dto.TransactionView:
+    from loguru import logger
+    logger.info('INSIDE API create transaction')
     created_obj = await service.create(request)
+    logger.info('INSIDE API create transaction AFTER create object:', created_obj)
     if created_obj is None:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,

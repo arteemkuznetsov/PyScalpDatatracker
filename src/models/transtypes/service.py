@@ -18,8 +18,8 @@ class Service:
     async def read_all(self) -> list[dto.TransTypeView]:
         return await self.repository.read_all()
 
-    async def update(self, id: int, request: dto.TransTypeView) -> bool:
-        data = await self.repository.read(id=id)
+    async def update(self, text: str, request: dto.TransTypeView) -> bool:
+        data = await self.repository.read(text)
         if not data:
             return False
         update_data = dto.TransTypeView(text=request.text)
