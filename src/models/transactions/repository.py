@@ -23,12 +23,8 @@ class Repository(BaseRepository):
     async def create(self, data: dto.TransactionView) -> dto.TransactionView:
         async with self.session() as session:
             async with session.begin():
-                from loguru import logger
-                logger.info('INSIDE Repository.create() transaction')
                 model = self._pydantic_to_model(data, self.database_model())
-                logger.info('INSIDE Repository.create() transaction AFTER pydatic to model')
                 session.add(model)
-                logger.info('INSIDE Repository.create() transaction AFTER add model')
                 await session.commit()
             await session.refresh(model)
             return self._model_to_pydantic(model, self.view_model)
