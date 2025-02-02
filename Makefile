@@ -32,6 +32,10 @@ rebuild-api: update
 	docker-compose rm -f -s -v api
 	docker-compose up -d --no-deps --build api
 
+rebuild-worker: update
+	docker-compose rm -f -s -v worker
+	docker-compose up -d --no-deps --build worker
+
 stop:
 	$(foreach file, $(COMPOSE_FILE), $(DOCKER_COMPOSE) $(file) down;)
 
