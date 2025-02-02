@@ -30,13 +30,15 @@ class Tracker:
                 logger.info('Выбранная пара обновлена')
                 start_time = time.time()
 
-            logger.info('Начало таймаута 1.1 с')
-            time.sleep(1.1)
-            logger.info('Конец таймаута 1.1 с')
+            logger.info('Начало таймаута')
+            time.sleep(2)
+            logger.info('Конец таймаута')
             try:
                 logger.info('Получаем текущую цену')
                 current_price = self.get_current_price(pair=self.selected_pair.text)
-                logger.info('Текущая цена получена')
+                if not current_price:
+                    continue
+
                 logger.info(f'{self.selected_pair.text}: {current_price}')
                 await price_service.create(
                     PriceView(
@@ -45,7 +47,7 @@ class Tracker:
                         pair_id=self.selected_pair.id
                     )
                 )
-                logger.info('Сделана запись в таблицу pairs')
+                logger.info('Сделана запись в таблицу')
             except Exception as e:
                 logger.error(e)
 
@@ -56,12 +58,16 @@ class Tracker:
         else:
             return None
 
-    def get_current_price(self, pair: str, category: str = 'spot') -> float:
+    def get_current_price(self, pair: str, category: str = 'spot') -> float | None:
         url = 'https://api.bybit.com/v5/market/tickers'
         params = f'?category={category}&symbol={pair}'
-        response = requests.get(f'{url}{params}')
+        try:
+            response = requests.get(f'{url}{params}', timeout=5)
 
-        if response and 'result' in response.json() and response.json()['result']:
-            return float(response.json()['result']['list'][0]['lastPrice'])
-        else:
-            raise Exception(response.json()['retMsg'])
+            if response and 'result' in response.json() and response.json()['result']:
+                return float(response.json()['result']['list'][0]['lastPrice'])
+            else:
+                raise Exception(response.json()['retMsg'])
+        except requests.exceptions.Timeout:
+            logger.info('TIMED OUT')
+            return None
