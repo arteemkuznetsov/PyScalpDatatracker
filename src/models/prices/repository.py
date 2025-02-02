@@ -53,6 +53,7 @@ class Repository(BaseRepository):
             select(orm.Price)
             .where(self.database_model.timestamp >= int(time.time()) - diff_sec)
             .where(self.database_model.pair_id == selected_pair.id)
+            .order_by(self.database_model.timestamp)
         )
         async with self.session() as session:
             try:
