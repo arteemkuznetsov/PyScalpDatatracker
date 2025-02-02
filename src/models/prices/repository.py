@@ -48,7 +48,6 @@ class Repository(BaseRepository):
         if not selected_pair:
             return []
 
-        logger.info(f'TIMESTAMP >= {int(time.time()) - diff_sec}')
         stmt = (
             select(orm.Price)
             .where(self.database_model.timestamp >= int(time.time()) - diff_sec)
@@ -67,6 +66,7 @@ class Repository(BaseRepository):
     async def read_all(self) -> list[dto.PriceView]:
         stmt = (
             select(orm.Price)
+            .order_by(self.database_model.timestamp)
         )
         async with self.session() as session:
             try:
