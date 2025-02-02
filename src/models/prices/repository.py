@@ -48,6 +48,7 @@ class Repository(BaseRepository):
         if not selected_pair:
             return []
 
+        logger.info('TIMESTAMP >= ', int(time.time()) - diff_sec)
         stmt = (
             select(orm.Price)
             .where(self.database_model.timestamp >= int(time.time()) - diff_sec)
