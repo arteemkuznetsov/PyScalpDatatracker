@@ -27,11 +27,16 @@ class Tracker:
             current_time = time.time()
             if int(current_time - start_time) >= self.pair_check_interval_min * 60:
                 self.selected_pair = await self.get_selected_pair()
+                logger.info('Выбранная пара обновлена')
                 start_time = time.time()
 
+            logger.info('Начало таймаута 1.1 с')
             time.sleep(1.1)
+            logger.info('Конец таймаута 1.1 с')
             try:
+                logger.info('Получаем текущую цену')
                 current_price = self.get_current_price(pair=self.selected_pair.text)
+                logger.info('Текущая цена получена')
                 logger.info(f'{self.selected_pair.text}: {current_price}')
                 await price_service.create(
                     PriceView(
@@ -40,6 +45,7 @@ class Tracker:
                         pair_id=self.selected_pair.id
                     )
                 )
+                logger.info('Сделана запись в таблицу pairs')
             except Exception as e:
                 logger.error(e)
 

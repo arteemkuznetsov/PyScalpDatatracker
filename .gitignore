@@ -167,3 +167,5 @@ infra/db/.env-pgadmin
 logs-api/
 logs-worker/
 infra/db/db_data/
+/.env-pg
+/.env-pgadmin
