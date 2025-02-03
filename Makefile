@@ -14,12 +14,8 @@ init: build
 	$(DOCKER_COMPOSE) $(COMPOSE_FILE_DB) up -d
 
 update:
-	@if git pull | grep -q 'Already up to date.'; then \
-		echo "No changes pulled from git, skipping build."; \
-	else \
-		echo "Changes detected, building Docker image..."; \
-		docker build -t pyscalp-datatracker .; \
-	fi
+	git pull
+	docker build -t pyscalp-datatracker .
 
 run:
 	git pull
