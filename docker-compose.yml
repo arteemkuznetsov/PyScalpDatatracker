@@ -26,3 +26,4 @@ networks:
   remote:
     external: true
     name: db_remote
+
