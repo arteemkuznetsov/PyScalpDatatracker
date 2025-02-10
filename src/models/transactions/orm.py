@@ -1,4 +1,4 @@
-from sqlalchemy import BigInteger, ForeignKey, Column, Integer, Numeric
+from sqlalchemy import BigInteger, ForeignKey, Column, Integer, Numeric, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.db import Base
@@ -9,6 +9,7 @@ class Transaction(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     value: Mapped[float] = mapped_column(Numeric(precision=10, scale=4), nullable=False)
     timestamp: Mapped[int] = mapped_column(BigInteger, nullable=False)
+    order_id: Mapped[str] = mapped_column(String, nullable=False, unique=True)
     type_id: Mapped[int] = mapped_column(BigInteger, ForeignKey('transtypes.id', ondelete='CASCADE'), nullable=False)
     type = relationship(
         'TransType',
