@@ -1,15 +1,12 @@
 import time
-from datetime import timedelta
 
 import requests
-
 from loguru import logger
 
-from src.models.pairs.service import Service as PairService
-from src.models.prices.service import Service as PriceService
-
 from src.models.pairs.dto import PairView
+from src.models.pairs.service import Service as PairService
 from src.models.prices.dto import PriceView
+from src.models.prices.service import Service as PriceService
 
 pair_service = PairService()
 price_service = PriceService()
@@ -27,14 +24,10 @@ class Tracker:
             current_time = time.time()
             if int(current_time - start_time) >= self.pair_check_interval_min * 60:
                 self.selected_pair = await self.get_selected_pair()
-                logger.info('Выбранная пара обновлена')
                 start_time = time.time()
 
-            logger.info('Начало таймаута')
             time.sleep(2)
-            logger.info('Конец таймаута')
             try:
-                logger.info('Получаем текущую цену')
                 current_price = self.get_current_price(pair=self.selected_pair.text)
                 if not current_price:
                     continue
@@ -47,7 +40,6 @@ class Tracker:
                         pair_id=self.selected_pair.id
                     )
                 )
-                logger.info('Сделана запись в таблицу')
             except Exception as e:
                 logger.error(e)
 
