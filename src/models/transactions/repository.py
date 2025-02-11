@@ -34,7 +34,6 @@ class Repository(BaseRepository):
             stmt = (
                 self.__base_stmt()
                 .where(self.database_model.id == id)
-                .order_by(self.database_model.timestamp)
             )
             model = (await session.scalars(stmt)).unique().first()
             if model:
@@ -43,6 +42,7 @@ class Repository(BaseRepository):
     async def read_all(self) -> list[dto.TransactionView]:
         stmt = (
             select(orm.Transaction)
+            .order_by(self.database_model.timestamp)
         )
         async with self.session() as session:
             try:
