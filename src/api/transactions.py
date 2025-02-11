@@ -19,7 +19,6 @@ service = Service()
     dependencies=[Depends(Auth().check_access_token)]
 )
 async def create(request: dto.TransactionView) -> dto.TransactionView:
-    print(request)
     created_obj = await service.create(request)
     if created_obj is None:
         raise HTTPException(
