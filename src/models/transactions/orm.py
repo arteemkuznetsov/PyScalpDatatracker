@@ -14,6 +14,7 @@ class Transaction(Base):
     quantity: Mapped[float] = mapped_column(Numeric(precision=12, scale=6), nullable=False)
     fee: Mapped[float] = mapped_column(Numeric(precision=18, scale=12), nullable=False)
     pair_id: Mapped[int] = mapped_column(BigInteger, ForeignKey('pairs.id', ondelete='CASCADE'), nullable=False)
+    balance: Mapped[float] = mapped_column(Numeric(precision=15, scale=9), nullable=False)
     type = relationship(
         'TransType',
         foreign_keys=[type_id],
