@@ -34,6 +34,7 @@ class Repository(BaseRepository):
             stmt = (
                 self.__base_stmt()
                 .where(self.database_model.id == id)
+                .order_by(self.database_model.timestamp)
             )
             model = (await session.scalars(stmt)).unique().first()
             if model:
