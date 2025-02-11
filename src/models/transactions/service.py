@@ -12,7 +12,12 @@ class Service:
         create_data = dto.TransactionView(
             value=request.value,
             timestamp=request.timestamp,
-            type_id=request.type_id
+            type_id=request.type_id,
+            order_id=request.order_id,
+            quantity=request.quantity,
+            fee=request.fee,
+            pair_id=request.pair_id,
+            balance=request.balance
         )
         return await self.repository.create(create_data)
 
