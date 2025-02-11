@@ -12,7 +12,7 @@ class Transaction(Base):
     order_id: Mapped[str] = mapped_column(String, nullable=False, unique=True)
     type_id: Mapped[int] = mapped_column(BigInteger, ForeignKey('transtypes.id', ondelete='CASCADE'), nullable=False)
     quantity: Mapped[float] = mapped_column(Numeric(precision=12, scale=6), nullable=False)
-    fee: Mapped[float] = mapped_column(Numeric(precision=18, scale=12), nullable=False)
+    fee: Mapped[float] = mapped_column(Numeric(precision=16, scale=10), nullable=False)
     pair_id: Mapped[int] = mapped_column(BigInteger, ForeignKey('pairs.id', ondelete='CASCADE'), nullable=False)
     balance: Mapped[float] = mapped_column(Numeric(precision=10, scale=4), nullable=False)
     type = relationship(
