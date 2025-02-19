@@ -32,7 +32,7 @@ rebuild-worker: update
 	docker-compose rm -f -s -v worker
 	docker-compose up -d --no-deps --build worker
 
-db-upgrade:
+db-upgrade: rebuild-api
 	docker exec -i api alembic upgrade head
 
 stop:
