@@ -32,6 +32,9 @@ rebuild-worker: update
 	docker-compose rm -f -s -v worker
 	docker-compose up -d --no-deps --build worker
 
+db-upgrade:
+	docker exec -i api alembic upgrade head
+
 stop:
 	$(foreach file, $(COMPOSE_FILE), $(DOCKER_COMPOSE) $(file) down;)
 
