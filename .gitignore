@@ -169,3 +169,4 @@ logs-worker/
 infra/db/db_data/
 /.env-pg
 /.env-pgadmin
+**/.htpasswd
