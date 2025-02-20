@@ -8,3 +8,10 @@ services:
      - ./config:/etc/nginx
     ports:
      - "80:80"
+    networks:
+      - remote
+
+networks:
+  remote:
+    external: true
+    name: db_remote
