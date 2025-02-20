@@ -6,7 +6,15 @@ from src.api import api_router
 
 class Server(FastAPI):
     def __init__(self, *args, **kwargs) -> None:
-        super().__init__(*args, **kwargs)
+        super().__init__(
+            *args,
+            **kwargs
+            title="API Documentation",
+            root_path="/docs",
+            docs_url="/",
+            openapi_url="/openapi.json",
+            redoc_url=None
+            )
         self.include_router(api_router)
 
 
