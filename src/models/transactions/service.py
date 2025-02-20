@@ -27,6 +27,9 @@ class Service:
     async def read_all(self) -> list[dto.TransactionView]:
         return await self.repository.read_all()
 
+    async def read_since_timestamp(self, timestamp: int) -> list[dto.TransactionView]:
+        return await self.repository.read_since_timestamp(timestamp)
+
     async def update(self, id: int, request: dto.TransactionView) -> bool:
         data = await self.repository.read(id=id)
         if not data:

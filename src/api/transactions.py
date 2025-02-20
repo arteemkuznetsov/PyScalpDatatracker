@@ -58,6 +58,19 @@ async def read_all() -> list[dto.TransactionView]:
     return rows
 
 
+@transactions_router.get(
+    path='/',
+    status_code=status.HTTP_200_OK,
+    tags=['Transactions'],
+    name='Read transactions since timestamp',
+)
+async def read_since_timestamp(timestamp: int) -> list[dto.TransactionView]:
+    rows = await service.read_since_timestamp(timestamp)
+    if rows is None:
+        return []
+    return rows
+
+
 @transactions_router.put(
     path='/{id}',
     status_code=status.HTTP_200_OK,

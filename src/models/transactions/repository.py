@@ -53,6 +53,21 @@ class Repository(BaseRepository):
                 logger.error(e)
                 return []
 
+    async def read_since_timestamp(self, timestamp: int) -> list[dto.TransactionView]:
+        stmt = (
+            select(orm.Transaction)
+            .where(self.database_model.timestamp >= timestamp)
+            .order_by(self.database_model.timestamp)
+        )
+        async with self.session() as session:
+            try:
+                result = (await session.scalars(stmt)).all()
+                return [self._model_to_pydantic(sa_model, dto.TransactionView) for sa_model in result]
+            except DatabaseError as e:
+                await session.rollback()
+                logger.error(e)
+                return []
+
     async def update(self, update_data: dto.TransactionView, data: dto.TransactionView) -> bool:
         async with self.session() as session:
             async with session.begin():
