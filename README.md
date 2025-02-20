@@ -10,3 +10,9 @@
 API rebuild:
 
 `make rebuild-api`
+
+---
+
+DB upgrade
+
+`make db-upgrade`

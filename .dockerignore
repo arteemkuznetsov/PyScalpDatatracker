@@ -36,4 +36,4 @@ README.md
 *.pyo
 *.pyd
 *.git
-db_data
+**/infra
