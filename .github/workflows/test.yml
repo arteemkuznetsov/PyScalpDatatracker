@@ -1,13 +1,14 @@
 name: TEST
 on: [push]
 jobs:
-  our-first-job:
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Set up SSH
         uses: webfactory/ssh-agent@v0.9.0
         with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          ssh-private-key: |
+            ${{ secrets.SSH_PRIVATE_KEY }}
       - name: Run bash script via ssh
         run: |
           ssh -o StrictHostKeyChecking=no root@$91.107.120.205 -p 56888 "pwd"
