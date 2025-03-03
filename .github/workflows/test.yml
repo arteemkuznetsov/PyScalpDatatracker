@@ -4,11 +4,12 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Set up SSH
-        uses: webfactory/ssh-agent@v0.9.0
-        with:
-          ssh-private-key: |
-            ${{ secrets.SSH_PRIVATE_KEY }}
+      - name: Set up SSH manually
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" | tr -d '\r' > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -p 56888 91.107.120.205 >> ~/.ssh/known_hosts
       - name: Run bash script via ssh
         run: |
           ssh -o StrictHostKeyChecking=no root@$91.107.120.205 -p 56888 "pwd"
