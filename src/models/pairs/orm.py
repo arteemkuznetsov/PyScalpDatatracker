@@ -9,3 +9,4 @@ class Pair(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     text: Mapped[str] = mapped_column(String, nullable=False, unique=True)
     selected: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False, unique=False)
+    qty_precision: Mapped[int] = mapped_column(Integer, nullable=False, unique=False)

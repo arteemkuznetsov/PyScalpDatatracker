@@ -9,7 +9,7 @@ class Service:
         self.repository = Repository()
 
     async def create(self, request: dto.PairView) -> dto.PairView:
-        create_data = dto.PairView(text=request.text, selected=request.selected)
+        create_data = dto.PairView(text=request.text, selected=request.selected, qty_precision=request.qty_precision)
         return await self.repository.create(create_data)
 
     async def read(self, id: int) -> dto.PairView | None:
@@ -25,7 +25,7 @@ class Service:
         data = await self.repository.read(id=id)
         if not data:
             return False
-        update_data = dto.PairView(text=request.text, selected=request.selected)
+        update_data = dto.PairView(text=request.text, selected=request.selected, qty_precision=request.qty_precision)
         return await self.repository.update(update_data, data)
 
     async def delete(self, id: int) -> bool:
