@@ -27,6 +27,7 @@ restart:
 rebuild-api: update
 	docker-compose rm -f -s -v api
 	docker-compose up -d --no-deps --build api
+	docker restart nginx
 
 rebuild-worker: update
 	docker-compose rm -f -s -v worker
