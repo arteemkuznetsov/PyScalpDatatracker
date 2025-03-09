@@ -45,6 +45,7 @@ class Repository(BaseRepository):
                 stmt = (
                     self.__base_stmt()
                     .where(self.database_model.selected)
+                    .order_by(self.database_model.text)
                 )
                 result = (await session.scalars(stmt)).all()
                 return [self._model_to_pydantic(sa_model, dto.PairView) for sa_model in result]
