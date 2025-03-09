@@ -39,15 +39,19 @@ class Repository(BaseRepository):
             if model:
                 return self._model_to_pydantic(model, self.view_model)
 
-    async def read_selected(self) -> dto.PairView | None:
+    async def read_selected(self) -> list[dto.PairView] | None:
         async with self.session() as session:
-            stmt = (
-                self.__base_stmt()
-                .where(self.database_model.selected)
-            )
-            model = (await session.scalars(stmt)).unique().first()
-            if model:
-                return self._model_to_pydantic(model, self.view_model)
+            try:
+                stmt = (
+                    self.__base_stmt()
+                    .where(self.database_model.selected)
+                )
+                result = (await session.scalars(stmt)).all()
+                return [self._model_to_pydantic(sa_model, dto.PairView) for sa_model in result]
+            except DatabaseError as e:
+                await session.rollback()
+                logger.error(e)
+                return []
 
     async def read_all(self) -> list[dto.PairView]:
         stmt = (

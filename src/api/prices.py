@@ -47,13 +47,13 @@ async def read(id: int) -> dto.PriceView:
     path='/',
     status_code=status.HTTP_200_OK,
     tags=['Prices'],
-    name='Read multiple prices: All / Selected Pair Observations Since N Seconds Ago',
+    name='Read all price observations for last N seconds',
 )
-async def read_all(diff_sec: int | None = None) -> list[dto.PriceView]:
+async def read_all(pair_id: int, diff_sec: int | None = None) -> list[dto.PriceView]:
     if diff_sec:
-        rows = await service.read_current_pair_from_time(diff_sec)
+        rows = await service.read_current_pair_from_time(pair_id, diff_sec)
     else:
-        rows = await service.read_all()
+        rows = await service.read_all(pair_id)
     if rows is None:
         return []
     return rows

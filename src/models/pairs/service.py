@@ -15,7 +15,7 @@ class Service:
     async def read(self, id: int) -> dto.PairView | None:
         return await self.repository.read(id)
 
-    async def read_selected(self) -> dto.PairView | None:
+    async def read_selected(self) -> list[dto.PairView] | None:
         return await self.repository.read_selected()
 
     async def read_all(self) -> list[dto.PairView]:

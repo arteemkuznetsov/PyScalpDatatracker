@@ -13,42 +13,44 @@ price_service = PriceService()
 
 
 class Tracker:
-    selected_pair: PairView
+    selected_pairs: list[PairView]
     pair_check_interval_min: int = 1
 
     async def run(self):
         start_time = time.time()
-        self.selected_pair = await self.get_selected_pair()
+        self.selected_pairs = await self.get_selected_pairs()
 
         while True:
             current_time = time.time()
             if int(current_time - start_time) >= self.pair_check_interval_min * 60:
-                self.selected_pair = await self.get_selected_pair()
+                self.selected_pairs = await self.get_selected_pairs()
                 start_time = time.time()
 
-            time.sleep(2)
-            try:
-                current_price = self.get_current_price(pair=self.selected_pair.text)
-                if not current_price:
-                    continue
+            time.sleep(1.3)
 
-                logger.info(f'{self.selected_pair.text}: {current_price}')
-                await price_service.create(
-                    PriceView(
-                        value=current_price,
-                        timestamp=int(time.time()),
-                        pair_id=self.selected_pair.id
+            for selected_pair in self.selected_pairs:
+                try:
+                    current_price = self.get_current_price(pair=selected_pair.text)
+                    if not current_price:
+                        continue
+
+                    logger.info(f'{selected_pair.text}: {current_price}')
+                    await price_service.create(
+                        PriceView(
+                            value=current_price,
+                            timestamp=int(time.time()),
+                            pair_id=selected_pair.id
+                        )
                     )
-                )
-            except Exception as e:
-                logger.error(e)
+                except Exception as e:
+                    logger.error(e)
 
-    async def get_selected_pair(self) -> PairView:
-        pair = await pair_service.read_selected()
-        if pair:
-            return pair
+    async def get_selected_pairs(self) -> list[PairView]:
+        pairs = await pair_service.read_selected()
+        if pairs:
+            return pairs
         else:
-            return None
+            return []
 
     def get_current_price(self, pair: str, category: str = 'spot') -> float | None:
         url = 'https://api.bybit.com/v5/market/tickers'

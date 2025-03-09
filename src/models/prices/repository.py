@@ -42,16 +42,11 @@ class Repository(BaseRepository):
             if model:
                 return self._model_to_pydantic(model, self.view_model)
 
-    async def read_current_pair_from_time(self, diff_sec: int) -> list[dto.PriceView] | None:
-        pair_service = PriceService()
-        selected_pair = await pair_service.read_selected()
-        if not selected_pair:
-            return []
-
+    async def read_last_seconds(self, pair_id: int, diff_sec: int) -> list[dto.PriceView] | None:
         stmt = (
             select(orm.Price)
             .where(self.database_model.timestamp >= int(time.time()) - diff_sec)
-            .where(self.database_model.pair_id == selected_pair.id)
+            .where(self.database_model.pair_id == pair_id)
             .order_by(self.database_model.timestamp)
         )
         async with self.session() as session:
@@ -63,9 +58,10 @@ class Repository(BaseRepository):
                 logger.error(e)
                 return []
 
-    async def read_all(self) -> list[dto.PriceView]:
+    async def read_all(self, pair_id: int) -> list[dto.PriceView]:
         stmt = (
             select(orm.Price)
+            .where(self.database_model.pair_id == pair_id)
             .order_by(self.database_model.timestamp)
         )
         async with self.session() as session:
