@@ -27,8 +27,16 @@ class Service:
     async def read_all(self) -> list[dto.TransactionView]:
         return await self.repository.read_all()
 
-    async def read_since_timestamp(self, timestamp: int) -> list[dto.TransactionView]:
-        return await self.repository.read_since_timestamp(timestamp)
+    async def read_order_ids(self) -> list[str]:
+        return await self.repository.read_order_ids()
+
+    async def read_since_timestamp(
+            self,
+            timestamp: int,
+            type_id: int,
+            include_previous: bool
+    ) -> list[dto.TransactionView]:
+        return await self.repository.read_since_timestamp(timestamp, type_id, include_previous)
 
     async def update(self, id: int, request: dto.TransactionView) -> bool:
         data = await self.repository.read(id=id)

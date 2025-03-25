@@ -1,6 +1,9 @@
+import asyncio
+
 from loguru import logger
 from sqlalchemy import select, delete
 from sqlalchemy.exc import DatabaseError
+from sqlalchemy.sql.expression import func
 
 from src.models.repository import BaseRepository
 from src.models.transactions import dto, orm
@@ -53,10 +56,47 @@ class Repository(BaseRepository):
                 logger.error(e)
                 return []
 
-    async def read_since_timestamp(self, timestamp: int) -> list[dto.TransactionView]:
+    async def read_order_ids(self) -> list[str]:
+        stmt = (
+            select(orm.Transaction.order_id)
+        )
+        async with self.session() as session:
+            try:
+                result = (await session.scalars(stmt)).all()
+                return result
+            except DatabaseError as e:
+                await session.rollback()
+                logger.error(e)
+                return []
+
+    async def read_since_timestamp(
+            self,
+            timestamp: int,
+            type_id: int,
+            include_previous: bool
+    ) -> list[dto.TransactionView]:
+
+        if include_previous:
+            stmt = (
+                select(func.max(orm.Transaction.id))
+                .filter(self.database_model.timestamp < timestamp,
+                        self.database_model.type_id == type_id)
+            )
+        else:
+            stmt = (
+                select(func.min(orm.Transaction.id))
+                .filter(self.database_model.timestamp >= timestamp, self.database_model.type_id == type_id)
+            )
+        async with self.session() as session:
+            try:
+                transaction_id = (await session.scalars(stmt)).first()
+            except DatabaseError:
+                return None
+
         stmt = (
             select(orm.Transaction)
-            .where(self.database_model.timestamp >= timestamp)
+            .where(self.database_model.id >= transaction_id)
+            .where(self.database_model.type_id == type_id)
             .order_by(self.database_model.timestamp)
         )
         async with self.session() as session:

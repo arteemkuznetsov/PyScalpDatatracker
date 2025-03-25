@@ -46,13 +46,13 @@ async def read(id: int) -> dto.TransactionView:
 
 
 @transactions_router.get(
-    path='/',
+    path='/orderids/',
     status_code=status.HTTP_200_OK,
     tags=['Transactions'],
-    name='Read all transactions',
+    name='Read all order IDs',
 )
-async def read_all() -> list[dto.TransactionView]:
-    rows = await service.read_all()
+async def read_since_timestamp() -> list[str]:
+    rows = await service.read_order_ids()
     if rows is None:
         return []
     return rows
@@ -64,8 +64,12 @@ async def read_all() -> list[dto.TransactionView]:
     tags=['Transactions'],
     name='Read transactions since timestamp',
 )
-async def read_since_timestamp(timestamp: int) -> list[dto.TransactionView]:
-    rows = await service.read_since_timestamp(timestamp)
+async def read_since_timestamp(
+        timestamp: int,
+        type_id: int,
+        include_previous: bool = False
+) -> list[dto.TransactionView]:
+    rows = await service.read_since_timestamp(timestamp=timestamp, type_id=type_id, include_previous=include_previous)
     if rows is None:
         return []
     return rows
