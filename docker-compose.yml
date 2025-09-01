@@ -16,20 +16,6 @@ services:
     # ports:
     #   - "8135:8000"
 
-  worker:
-    image: pyscalp-datatracker
-    restart: always
-    container_name: worker
-    logging:
-      driver: json-file
-      options:
-        max-size: "20m"
-    command: python worker.py
-    env_file:
-      - .env-app
-    networks:
-      - remote
-
 networks:
   remote:
     external: true
